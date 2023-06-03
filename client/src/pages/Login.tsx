@@ -1,18 +1,35 @@
+import {useEffect} from 'react'
 import { Typography, TextField, FormGroup } from '@mui/material'
 import {LoadingButton} from '@mui/lab';
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import styled from 'styled-components'
 import {useFormik} from 'formik'
 import { initialValues, validationSchema } from '../formik-validation/login';
+import { useAppDispatch,useAppSelector} from '../store/store';
+import { clearErrors, loginUser } from '../store/userReducer';
+
 
 const Login = () => {
+    const dispatch=useAppDispatch();
+    const navigate=useNavigate();
+    const {loginLoading,user,errors:loginErrors}=useAppSelector(state=>state.user)
     const {errors,dirty,handleSubmit,getFieldProps,touched}=useFormik({
         initialValues,
         validationSchema,
-        onSubmit:()=>{
-            console.log('login')
+        onSubmit:(values)=>{
+           dispatch(loginUser({input:values,onSuccess:()=>{
+            navigate('/')
+           }}))
         }
     })
+    useEffect(()=>{
+      if(user || localStorage.getItem('user')) {
+        navigate('/')
+      }
+    },[user,navigate])
+    useEffect(()=>{
+      dispatch(clearErrors())
+    },[dispatch]);
   return (
     <Container>
         <Form>
@@ -22,11 +39,14 @@ const Login = () => {
         {errors.email && touched.email && <ErrorMessage>{errors.email}</ErrorMessage>}
         </FormGroup>
         <FormGroup sx={{width:'100%'}}>
-        <TextField {...getFieldProps('password')} label='Password' fullWidth/>
+        <TextField type="password" {...getFieldProps('password')} label='Password' fullWidth/>
         {errors.password && touched.password && <ErrorMessage>{errors.password}</ErrorMessage>}
         </FormGroup>
-       
-        <LoadingButton variant='contained' fullWidth>Sign In</LoadingButton>
+        {Object.values(loginErrors).length ? <ErrorMessage>{loginErrors.error}</ErrorMessage>:""}
+        <LoadingButton loading={loginLoading} onClick={(e)=>{
+                e.preventDefault();
+                handleSubmit();
+        }}   type="submit" disabled={!dirty && Object.values(errors).length>0} variant='contained' fullWidth>Sign In</LoadingButton>
         <MetaInfo>Don't have an account? <Link to='/register'>Sign Up</Link> </MetaInfo>
         </Form>
     </Container>

@@ -1,22 +1,46 @@
+import {useEffect} from 'react'
 import { Typography, TextField, FormGroup } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import {toast,Toaster} from 'react-hot-toast'
 import { useFormik } from 'formik';
 
 import { initialValues, validationSchema } from '../formik-validation/register';
+import { useAppDispatch, useAppSelector } from '../store/store';
+import { clearErrors, registerUser } from '../store/userReducer';
 
 const Register = () => {
+  const dispatch=useAppDispatch();
+  const navigate=useNavigate();
+  const {user}=useAppSelector(state=>state.user)
   const { handleSubmit, dirty, getFieldProps, touched, errors } = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: () => {
-      console.log('register');
+    onSubmit: (values) => {
+      dispatch(registerUser({input:values,onSuccess:()=>{
+        toast('User registered succesfully!',{duration:2000});
+        setTimeout(()=>{
+          navigate('/login')
+        },2000)
+      }}))
     },
   });
+  useEffect(() => {
+    if(user || localStorage.getItem('user')) {
+      navigate('/');
+    }
+    
+  }, [user,navigate])
+  useEffect(()=>{
+    dispatch(clearErrors())
+  },[dispatch]);
+  
+  const {registerLoading}=useAppSelector(state=>state.user)
   return (
     <Container>
-      <Form>
+      <Toaster/>
+      <Form >
         <Typography variant="h4">Sign Up</Typography>
         <FormGroup sx={{ width: '100%' }}>
           <TextField
@@ -41,19 +65,22 @@ const Register = () => {
           )}
         </FormGroup>
         <FormGroup sx={{ width: '100%' }}>
-          <TextField {...getFieldProps('password')} label="Password" fullWidth />
+          <TextField type="password" {...getFieldProps('password')} label="Password" fullWidth />
           {errors.password && touched.password && (
             <ErrorMessage>{errors.password}</ErrorMessage>
           )}
         </FormGroup>
         <FormGroup sx={{ width: '100%' }}>
-          <TextField {...getFieldProps('confirmPassword')} label="Confirm Password" fullWidth />
+          <TextField type="password" {...getFieldProps('confirmPassword')} label="Confirm Password" fullWidth />
           {errors.confirmPassword && touched.confirmPassword && (
             <ErrorMessage>{errors.confirmPassword}</ErrorMessage>
           )}
         </FormGroup>
 
-        <LoadingButton variant="contained" fullWidth>
+        <LoadingButton type='submit' onClick={(e)=>{
+            e.preventDefault();
+            handleSubmit()
+        }} loading={registerLoading} disabled={!dirty || Object.values(errors).length>0} variant="contained" fullWidth>
           Sign Up
         </LoadingButton>
         <MetaInfo>

@@ -1,6 +1,18 @@
 import mongoose from 'mongoose'
+import bcrypt from 'bcrypt'
 
-const User=new mongoose.Schema({
+interface UserSchemInterface {
+    firstName:string;
+    lastName:string;
+    email:string;
+    password:string;
+    status:string;
+    lastLoginTime:Date;
+    comparePassword:(candidatePassword:string)=>Promise<boolean>
+    _doc:any;
+}
+
+const UserSchema=new mongoose.Schema<UserSchemInterface>({
     firstName:{
         type:String,
         required:true
@@ -29,4 +41,17 @@ const User=new mongoose.Schema({
     }
 },{timestamps:true})
 
-export default User;
+UserSchema.pre('save',async function(next) {
+    if(!this.isModified('password')) {
+        return next();
+    };
+    this.password=await bcrypt.hash(this.password,12);
+    next();
+})
+
+UserSchema.methods.comparePassword=async function(candidatePassword:string) {
+    const isPasswordCorrect=await bcrypt.compare(candidatePassword,this.password);
+    return isPasswordCorrect;
+}
+
+export default mongoose.model('User',UserSchema);

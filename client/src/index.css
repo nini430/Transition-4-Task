@@ -5,6 +5,22 @@
 }
 
 body {
-  background-color: aquamarine;
+  background-color: rgb(193, 233, 220);
 }
 
+th,td {
+  text-align:center !important;
+}
+
+.success {
+  color:limegreen;
+}
+
+.error {
+  color:orangered;
+}
+
+.table-wrapper {
+  overflow-x:auto !important;
+  max-width:100vw;
+}

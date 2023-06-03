@@ -1,6 +1,6 @@
 import { ObjectSchema, object, string, ref } from 'yup';
 
-interface UserInitialState {
+export interface UserInitialState {
   firstName: string;
   lastName: string;
   email: string;
