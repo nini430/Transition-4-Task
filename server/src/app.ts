@@ -14,7 +14,7 @@ app.use(express.static(path.join(__dirname,'..','public')));
 
 app.use('/api/v1', apiRouter);
 
-app.get('/*',(req:Request,res:Response)=>{
+app.get('/*',(request:Request,res:Response)=>{
     res.sendFile(path.join(__dirname,'..','public','index.html'))
 })
 
