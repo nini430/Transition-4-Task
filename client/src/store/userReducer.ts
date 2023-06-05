@@ -92,7 +92,7 @@ const userReducer = createSlice({
     builder.addCase(registerUser.fulfilled, (state) => {
       state.registerLoading = false;
     });
-    builder.addCase(registerUser.rejected, (state, action) => {
+    builder.addCase(registerUser.rejected, (state) => {
       state.registerLoading = false;
     });
     builder.addCase(loginUser.pending, (state) => {

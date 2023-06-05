@@ -10,7 +10,7 @@ const authProtect=(req:any,res:Response,next:NextFunction)=>{
         return next(new ErrorResponse('Unauthorized',401));
       }
 
-      jwt.verify(token,process.env.JWT_SECRET!,(err,data)=>{
+      jwt.verify(token,process.env.JWT_SECRET!,(err:any,data:any)=>{
         if(err) {
             return next(new ErrorResponse('Unauthorized',401));
         }
