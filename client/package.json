@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "set BUILD_PATH=../server/public && npx --ignore-existing ./client/node_modules/vite/bin/vite",
+    "build": "set BUILD_PATH=../server/public&&  vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
@@ -25,8 +25,7 @@
     "react-redux": "^8.0.7",
     "react-router-dom": "^6.11.2",
     "styled-components": "^5.3.11",
-    "tsc": "^2.0.4",
-    "vite": "^4.3.9"
+    "tsc": "^2.0.4"
   },
   "devDependencies": {
     "@types/react": "^18.0.37",
