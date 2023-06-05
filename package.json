@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy":"npm run build --prefix client && npm start --prefix server"
+    "deploy": "npm run build --prefix client && npm start --prefix server"
   },
   "repository": {
     "type": "git",
@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/nini430/Transition-4-Task/issues"
   },
-  "homepage": "https://github.com/nini430/Transition-4-Task#readme"
+  "homepage": "https://github.com/nini430/Transition-4-Task#readme",
+  "dependencies": {
+    "npx": "^10.2.2"
+  }
 }
