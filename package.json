@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy": "cd client && npm run build && npm start --prefix server"
+    "build": "set BUILD_PATH=../server/public && cd client && npm run build",
+    "start": "node server/dist/server.js",
+    "deploy": "npm run build && npm start"
   },
   "repository": {
     "type": "git",
