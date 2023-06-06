@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios';
 
 const axiosApiInstance=axios.create({
-    baseURL:'http://localhost:8888/api/v1'
+    baseURL:'https://task44.onrender.com/api/v1'
 });
 
 axiosApiInstance.interceptors.request.use((request)=>{
